@@ -123,10 +123,12 @@ style.textContent = `
         position: fixed;
         bottom: 20px;
         right: 20px;
-        background-color: #3498db;
+        background-color: #000;
         color: white;
         padding: 1rem 2rem;
-        border-radius: 5px;
+        font-family: "Times New Roman", Times, serif;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
         animation: slideIn 0.3s ease-out;
     }
 
@@ -146,8 +148,9 @@ style.textContent = `
         background: none;
         border: none;
         font-size: 1.5rem;
-        color: #2c3e50;
+        color: #000;
         cursor: pointer;
+        font-family: "Times New Roman", Times, serif;
     }
 
     @media (max-width: 768px) {
@@ -162,8 +165,8 @@ style.textContent = `
             left: 0;
             right: 0;
             background-color: white;
-            padding: 1rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
         .nav-links.active {
@@ -173,16 +176,16 @@ style.textContent = `
         }
 
         .nav-links li {
-            margin: 1rem 0;
+            margin: 1.5rem 0;
         }
     }
 
     .product-card {
         background: white;
-        border-radius: 10px;
-        padding: 1rem;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        border-radius: 0;
+        padding: 0;
         transition: transform 0.3s ease;
+        position: relative;
     }
 
     .product-card:hover {
@@ -191,34 +194,46 @@ style.textContent = `
 
     .product-card img {
         width: 100%;
-        height: 300px;
+        height: 400px;
         object-fit: cover;
-        border-radius: 5px;
     }
 
     .product-card h3 {
         margin: 1rem 0;
+        font-family: "Times New Roman", Times, serif;
+        font-weight: 400;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 0 1.5rem;
     }
 
     .price {
-        color: #2c3e50;
-        font-weight: bold;
+        color: #000;
+        font-weight: 400;
         margin-bottom: 1rem;
+        font-size: 0.9rem;
+        padding: 0 1.5rem;
+        font-family: "Times New Roman", Times, serif;
     }
 
     .add-to-cart {
-        width: 100%;
+        width: calc(100% - 3rem);
+        margin: 0 1.5rem 1.5rem;
         padding: 0.8rem;
-        background-color: #3498db;
+        background-color: #000;
         color: white;
         border: none;
-        border-radius: 5px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.8rem;
         cursor: pointer;
         transition: background-color 0.3s ease;
+        font-family: "Times New Roman", Times, serif;
     }
 
     .add-to-cart:hover {
-        background-color: #2980b9;
+        background-color: #333;
     }
 `;
 document.head.appendChild(style);
