@@ -39,6 +39,11 @@ body {
     color: #000;
 }
 
+.logo a {
+    text-decoration: none;
+    color: inherit;
+}
+
 .nav-links {
     display: flex;
     list-style: none;
@@ -68,10 +73,12 @@ body {
     color: #000;
     font-size: 1.1rem;
     transition: color 0.3s ease;
+    cursor: pointer;
 }
 
 .nav-icons a:hover {
     color: #666;
+    cursor: pointer;
 }
 
 /* Hero Section */
@@ -86,6 +93,17 @@ body {
     text-align: center;
     color: #000;
     margin-top: 60px;
+}
+
+/* Page-specific hero backgrounds */
+.women-hero {
+    background-image: url('assets/women-hero.jpg');
+    color: white;
+}
+
+.men-hero {
+    background-image: url('assets/men-hero.jpg');
+    color: white;
 }
 
 .hero-content {
@@ -152,6 +170,7 @@ body {
     text-align: center;
     transition: all 0.3s ease;
     border: 1px solid #e5e5e5;
+    position: relative;
 }
 
 .category-card:hover {
@@ -185,17 +204,37 @@ body {
     padding: 0.8rem 2rem;
     border: 1px solid #000;
     transition: all 0.3s ease;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    z-index: 10;
 }
 
 .category-link:hover {
     background-color: #000;
     color: #fff;
+    cursor: pointer;
+}
+
+.category-card a {
+    position: relative;
+    z-index: 10;
+    cursor: pointer;
+}
+
+.category-card a:hover {
+    cursor: pointer;
 }
 
 /* Featured Products */
 .featured-products {
     padding: 4rem 2rem;
     background-color: #fff;
+}
+
+.women-products, .men-products, .accessories-products {
+    margin-top: 80px;
+    padding-top: 3rem;
 }
 
 .featured-products h2 {
@@ -209,10 +248,28 @@ body {
 
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
     max-width: 1400px;
     margin: 0 auto;
+}
+
+@media (max-width: 1200px) {
+    .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .product-card {
@@ -250,7 +307,7 @@ body {
     padding: 0 1.5rem;
 }
 
-.add-to-cart {
+.add-to-cart, .add-to-cart-btn {
     width: calc(100% - 3rem);
     margin: 0 1.5rem 1.5rem;
     padding: 0.8rem;
@@ -263,10 +320,67 @@ body {
     cursor: pointer;
     transition: background-color 0.3s ease;
     font-family: "Times New Roman", Times, serif;
+    position: relative;
+    overflow: hidden;
 }
 
-.add-to-cart:hover {
+.add-to-cart:hover, .add-to-cart-btn:hover {
     background-color: #333;
+}
+
+/* Button animation when added to cart */
+@keyframes buttonSuccess {
+    0% {
+        background-color: #000;
+    }
+    50% {
+        background-color: #4CAF50;
+    }
+    100% {
+        background-color: #000;
+    }
+}
+
+.button-added {
+    animation: buttonSuccess 1s ease;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+.ripple {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    top: 50%;
+    left: 50%;
+    margin-left: -15px;
+    margin-top: -15px;
+    animation: ripple 0.8s ease-out;
+}
+
+/* Newly added item highlight */
+.cart-item.new-item {
+    animation: highlight 2s ease;
+}
+
+@keyframes highlight {
+    0% {
+        background-color: rgba(76, 175, 80, 0.1);
+    }
+    100% {
+        background-color: transparent;
+    }
 }
 
 /* Footer */
@@ -382,8 +496,21 @@ body {
 /* Product Card Hover Effects */
 .product-card {
     position: relative;
+    transition: transform 0.3s ease;
 }
 
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Make sure buttons remain clickable during animations */
+.add-to-cart-btn {
+    position: relative;
+    z-index: 10; /* Ensure button is above other elements */
+    pointer-events: auto; /* Force pointer events */
+}
+
+/* Product Card After Effects */
 .product-card::after {
     content: '';
     position: absolute;
@@ -394,6 +521,8 @@ body {
     background: rgba(0, 0, 0, 0.03);
     opacity: 0;
     transition: opacity 0.3s ease;
+    pointer-events: none; /* Ensure this doesn't block clicks */
+    z-index: 1;
 }
 
 .product-card:hover::after {
@@ -411,6 +540,8 @@ body {
     background: rgba(0, 0, 0, 0.1);
     opacity: 0;
     transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 1;
 }
 
 .category-card:hover::after {
@@ -450,5 +581,305 @@ body {
 
     .mobile-menu-button {
         padding: 0.5rem;
+    }
+}
+
+/* Featured Banner Section */
+.featured-banner {
+    padding: 6rem 2rem;
+    background-image: url('assets/banner-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: white;
+    text-align: center;
+}
+
+.banner-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.banner-content h2 {
+    font-size: 2rem;
+    font-weight: 300;
+    margin-bottom: 1rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.banner-content p {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    font-weight: 300;
+}
+
+.banner-content .category-link {
+    color: white;
+    border-color: white;
+}
+
+.banner-content .category-link:hover {
+    background-color: white;
+    color: black;
+}
+
+/* Cart Sidebar */
+.cart-sidebar {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100vh;
+    background-color: white;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease;
+    z-index: 2000;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.cart-sidebar.active {
+    right: 0;
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.cart-header h2 {
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.close-cart {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #000;
+}
+
+.cart-items {
+    margin-bottom: 20px;
+}
+
+.cart-item {
+    display: flex;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.cart-item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.cart-item-details {
+    flex-grow: 1;
+}
+
+.cart-item-name {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 0 5px 0;
+}
+
+.cart-item-price {
+    font-size: 0.9rem;
+    color: #000;
+    margin: 0 0 10px 0;
+}
+
+.cart-item-remove {
+    background: none;
+    border: none;
+    color: #999;
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+}
+
+.cart-footer {
+    border-top: 1px solid #e5e5e5;
+    padding-top: 20px;
+}
+
+.cart-total {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+
+.checkout-btn {
+    width: 100%;
+    padding: 15px 0;
+    background-color: #000;
+    color: white;
+    border: none;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.checkout-btn:hover {
+    background-color: #333;
+}
+
+.cart-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.cart-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.empty-cart-message {
+    text-align: center;
+    margin: 40px 0;
+    font-weight: 300;
+    color: #999;
+    letter-spacing: 1px;
+}
+
+@media (max-width: 480px) {
+    .cart-sidebar {
+        width: 100%;
+        right: -100%;
+    }
+}
+
+/* User Account Sidebar */
+.account-sidebar {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100vh;
+    background-color: white;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease;
+    z-index: 2000;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.account-sidebar.active {
+    right: 0;
+}
+
+.account-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.account-header h2 {
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.close-account {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #000;
+}
+
+.account-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.account-btn {
+    width: 100%;
+    padding: 15px 0;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    font-family: "Times New Roman", Times, serif;
+    border: none;
+}
+
+.sign-in-btn {
+    background-color: #000;
+    color: white;
+}
+
+.sign-in-btn:hover {
+    background-color: #333;
+}
+
+.join-btn {
+    background-color: white;
+    color: #000;
+    border: 1px solid #000;
+}
+
+.join-btn:hover {
+    background-color: #f5f5f5;
+}
+
+.account-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.account-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+@media (max-width: 480px) {
+    .account-sidebar {
+        width: 100%;
+        right: -100%;
     }
 }

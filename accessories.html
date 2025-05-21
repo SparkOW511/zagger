@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zagger - Modern Fashion Store</title>
+    <title>Accessories Collection - Zagger</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <header class="header">
         <nav class="nav-container">
-            <div class="logo">ZAGGER</div>
+            <div class="logo"><a href="index.html">ZAGGER</a></div>
             <ul class="nav-links">
                 <li><a href="#new">NEW</a></li>
                 <li><a href="women.html">WOMEN</a></li>
                 <li><a href="men.html">MEN</a></li>
-                <li><a href="accessories.html">ACCESSORIES</a></li>
+                <li><a href="accessories.html" class="active">ACCESSORIES</a></li>
                 <li><a href="#sale">SALE</a></li>
             </ul>
             <div class="nav-icons">
@@ -27,39 +27,10 @@
     </header>
 
     <main>
-        <section class="hero">
-            <div class="hero-content">
-                <h1>LABELS FOR LESS</h1>
-                <p>Discover the latest trends in fashion</p>
-                <button class="cta-button">SHOP NOW</button>
-            </div>
-        </section>
-
-        <section class="featured-categories">
-            <h2>SHOP BY CATEGORY</h2>
-            <div class="category-grid">
-                <div class="category-card">
-                    <h3>WOMEN</h3>
-                    <p>Discover our latest women's collection</p>
-                    <a href="women.html" class="category-link">SHOP NOW</a>
-                </div>
-                <div class="category-card">
-                    <h3>MEN</h3>
-                    <p>Explore our men's fashion selection</p>
-                    <a href="men.html" class="category-link">SHOP NOW</a>
-                </div>
-                <div class="category-card">
-                    <h3>ACCESSORIES</h3>
-                    <p>Complete your look with our accessories</p>
-                    <a href="accessories.html" class="category-link">SHOP NOW</a>
-                </div>
-            </div>
-        </section>
-
-        <section class="featured-products">
-            <h2>FEATURED PRODUCTS</h2>
-            <div class="product-grid" id="all-products-grid">
-                <!-- Product cards will be dynamically added here -->
+        <section class="featured-products accessories-products">
+            <h2>ACCESSORIES COLLECTION</h2>
+            <div class="product-grid" id="accessories-products-grid">
+                <!-- Products will be loaded dynamically -->
             </div>
         </section>
     </main>
@@ -111,8 +82,8 @@
     <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            displayProducts();
+            displayProductsByCategory('Accessories', 'accessories-products-grid');
         });
     </script>
 </body>
-</html>
+</html> 
