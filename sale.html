@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Women's Collection - Zagger</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Sale - Zagger</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header class="header">
@@ -13,10 +13,10 @@
             <div class="logo"><a href="index.html">ZAGGER</a></div>
             <ul class="nav-links">
                 <li><a href="new.html">NEW</a></li>
-                <li><a href="women.html" class="active">WOMEN</a></li>
+                <li><a href="women.html">WOMEN</a></li>
                 <li><a href="men.html">MEN</a></li>
                 <li><a href="accessories.html">ACCESSORIES</a></li>
-                <li><a href="sale.html">SALE</a></li>
+                <li><a href="sale.html" class="active">SALE</a></li>
             </ul>
             <div class="nav-icons">
                 <a href="#search"><i class="fas fa-search"></i></a>
@@ -60,9 +60,9 @@
     </div>
 
     <main>
-        <section class="featured-products women-products">
-            <h2>WOMEN'S COLLECTION</h2>
-            <div class="product-grid" id="women-products-grid">
+        <section class="featured-products sale-products">
+            <h2>SALE</h2>
+            <div class="product-grid" id="sale-products-grid">
                 <!-- Products will be loaded dynamically -->
             </div>
         </section>
@@ -113,10 +113,5 @@
     </footer>
 
     <script src="script.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            displayProductsByCategory('Women', 'women-products-grid');
-        });
-    </script>
 </body>
 </html> 

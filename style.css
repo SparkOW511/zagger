@@ -883,3 +883,78 @@ body {
         right: -100%;
     }
 }
+
+/* Search Results Page */
+.search-results-container {
+    max-width: 1200px;
+    margin: 6rem auto 2rem;
+    padding: 1rem;
+}
+
+.search-info {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.search-info h1 {
+    font-family: "Times New Roman", Times, serif;
+    font-weight: 400;
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+}
+
+.search-info p {
+    font-family: "Times New Roman", Times, serif;
+    color: #666;
+    font-size: 1rem;
+}
+
+#search-query-display {
+    font-style: italic;
+}
+
+.no-results-message {
+    text-align: center;
+    padding: 3rem 1rem;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 1.2rem;
+    color: #666;
+    width: 100%;
+}
+
+/* Similar Products Section */
+.similar-products-section {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid #eee;
+}
+
+.similar-products-section h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Make product grid in similar products section responsive */
+@media (max-width: 1200px) {
+    #similar-products-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    #similar-products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    #similar-products-grid {
+        grid-template-columns: 1fr;
+    }
+}

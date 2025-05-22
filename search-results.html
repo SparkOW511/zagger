@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Women's Collection - Zagger</title>
+    <title>Search Results - Zagger</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <header class="header">
         <nav class="nav-container">
-            <div class="logo"><a href="index.html">ZAGGER</a></div>
+            <div class="logo">ZAGGER</div>
             <ul class="nav-links">
                 <li><a href="new.html">NEW</a></li>
-                <li><a href="women.html" class="active">WOMEN</a></li>
+                <li><a href="women.html">WOMEN</a></li>
                 <li><a href="men.html">MEN</a></li>
                 <li><a href="accessories.html">ACCESSORIES</a></li>
                 <li><a href="sale.html">SALE</a></li>
@@ -60,10 +60,14 @@
     </div>
 
     <main>
-        <section class="featured-products women-products">
-            <h2>WOMEN'S COLLECTION</h2>
-            <div class="product-grid" id="women-products-grid">
-                <!-- Products will be loaded dynamically -->
+        <section class="search-results-container">
+            <div class="search-info">
+                <h1 id="search-title">Search Results</h1>
+                <p id="search-summary">Showing results for "<span id="search-query-display"></span>"</p>
+            </div>
+            
+            <div class="product-grid" id="search-results-grid">
+                <!-- Search result products will be dynamically added here -->
             </div>
         </section>
     </main>
@@ -115,7 +119,7 @@
     <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            displayProductsByCategory('Women', 'women-products-grid');
+            displaySearchResults();
         });
     </script>
 </body>
