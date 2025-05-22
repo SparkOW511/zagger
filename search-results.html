@@ -119,7 +119,9 @@
     <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            displaySearchResults();
+            // No need to call displaySearchResults here as it's already called in initializeProducts
+            // fetchProducts will handle displaying the search results
+            fetchProducts();
         });
     </script>
 </body>

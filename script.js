@@ -2098,6 +2098,9 @@ function displaySearchResults() {
     const resultsGrid = document.getElementById('search-results-grid');
     if (!resultsGrid) return;
     
+    // Clear any existing content first
+    resultsGrid.innerHTML = '';
+    
     // Filter products that match the search query
     const matchingProducts = products.filter(product => productMatchesSearch(product, searchQuery));
     
@@ -2114,6 +2117,8 @@ function displaySearchResults() {
     matchingProducts.forEach(product => {
         createProductCard(product, resultsGrid);
     });
+    
+    console.log(`Displayed ${matchingProducts.length} search results for "${searchQuery}"`);
 }
 
 // Add search events
@@ -2142,7 +2147,17 @@ function setupSearchEvents() {
             if (e.key === 'Enter') {
                 const query = this.value.trim();
                 if (query) {
-                    // Redirect to search results page with search query as parameter
+                    // Get current URL parameters
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const currentQuery = urlParams.get('q');
+                    
+                    // If we're already on the search page with the same query, just refresh the results
+                    if (window.location.pathname.includes('search-results.html') && currentQuery === query) {
+                        toggleSearch(); // Close the search slider
+                        return; // No need to navigate, just refresh the current page
+                    }
+                    
+                    // Otherwise, redirect to search results page with search query as parameter
                     window.location.href = `search-results.html?q=${encodeURIComponent(query)}`;
                     toggleSearch(); // Close the search slider
                 }
