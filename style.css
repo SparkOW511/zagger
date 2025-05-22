@@ -44,6 +44,15 @@ body {
     color: inherit;
 }
 
+.logo-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.logo-link:hover {
+    text-decoration: none;
+}
+
 .nav-links {
     display: flex;
     list-style: none;
