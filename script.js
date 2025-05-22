@@ -1,182 +1,33 @@
-// Sample product data
-const products = [
-    {
-        id: 1,
-        name: "Classic White T-Shirt",
-        price: 29.99,
-        image: "./assets/tshirt.webp",
-        category: "Men",
-        sizes: ["S", "M", "L", "XL"],
-        colors: ["White", "Black", "Gray"],
-        description: "Minimalist and versatile, this classic t-shirt is crafted from premium cotton for exceptional comfort and durability. Perfect for everyday wear, it features a clean design that pairs effortlessly with any outfit.",
-        rating: 4.7
-    },
-    {
-        id: 2,
-        name: "Summer Dress",
-        price: 49.99,
-        image: "./assets/dress.webp",
-        category: "Women",
-        sizes: ["XS", "S", "M", "L"],
-        colors: ["Blue", "Yellow", "Pink"],
-        description: "Embrace the season with this lightweight summer dress featuring a flattering silhouette and breathable fabric. The vibrant pattern and comfortable fit make it perfect for warm days and special occasions.",
-        rating: 4.5
-    },
-    {
-        id: 3,
-        name: "Leather Watch",
-        price: 99.99,
-        image: "./assets/bracelet.webp",
-        category: "Accessories",
-        sizes: ["One Size"],
-        colors: ["Brown", "Black"],
-        description: "This sophisticated timepiece combines classic design with modern functionality. Featuring genuine leather straps and precision quartz movement, it's the perfect accessory for any occasion.",
-        rating: 4.8
-    },
-    {
-        id: 4,
-        name: "Denim Jacket",
-        price: 79.99,
-        image: "./assets/tshirt.webp",
-        category: "Men",
-        sizes: ["S", "M", "L", "XL", "XXL"],
-        colors: ["Blue", "Black", "Washed Blue"],
-        description: "A wardrobe staple, this premium denim jacket offers timeless style and versatility. Made from high-quality cotton with just the right amount of stretch, it provides both comfort and durability.",
-        rating: 4.6
-    },
-    {
-        id: 5,
-        name: "Slim Fit Jeans",
-        price: 59.99,
-        image: "./assets/jeans.webp",
-        category: "Women",
-        sizes: ["24", "26", "28", "30", "32"],
-        colors: ["Dark Blue", "Light Blue", "Black"],
-        description: "These slim-fit jeans combine style and comfort with their premium stretch denim fabric. The flattering cut and modern design make them perfect for both casual and dressier occasions.",
-        rating: 4.4
-    },
-    {
-        id: 6,
-        name: "Cashmere Sweater",
-        price: 89.99,
-        image: "./assets/tshirt.webp",
-        category: "Women",
-        sizes: ["XS", "S", "M", "L"],
-        colors: ["Cream", "Gray", "Black", "Navy"],
-        description: "Indulge in luxury with this ultra-soft cashmere sweater. The timeless design and exceptional warmth make it a perfect addition to your fall and winter wardrobe.",
-        rating: 4.9
-    },
-    {
-        id: 7,
-        name: "Leather Boots",
-        price: 129.99,
-        image: "./assets/shoes.webp",
-        category: "Women",
-        sizes: ["36", "37", "38", "39", "40", "41"],
-        colors: ["Black", "Brown", "Tan"],
-        description: "Step out in style with these genuine leather boots featuring a comfortable heel and durable construction. Perfect for all-day wear, they add a touch of sophistication to any outfit.",
-        rating: 4.7
-    },
-    {
-        id: 8,
-        name: "Silk Scarf",
-        price: 34.99,
-        image: "./assets/dress.webp",
-        category: "Accessories",
-        sizes: ["One Size"],
-        colors: ["Floral", "Geometric", "Solid"],
-        description: "Elevate any outfit with this luxurious silk scarf. The premium material and elegant design make it perfect for adding a touch of sophistication to both casual and formal looks.",
-        rating: 4.6
-    },
-    {
-        id: 9,
-        name: "Wool Coat",
-        price: 149.99,
-        image: "./assets/tshirt.webp",
-        category: "Men",
-        sizes: ["S", "M", "L", "XL"],
-        colors: ["Charcoal", "Navy", "Camel"],
-        description: "Brave the cold in style with this premium wool coat. The classic design and superior insulation provide warmth without compromising on sophistication.",
-        rating: 4.8
-    },
-    {
-        id: 10,
-        name: "Leather Belt",
-        price: 39.99,
-        image: "./assets/bracelet.webp",
-        category: "Accessories",
-        sizes: ["85cm", "90cm", "95cm", "100cm"],
-        colors: ["Black", "Brown", "Tan"],
-        description: "Crafted from genuine leather, this versatile belt features a timeless design and durable metal buckle. Perfect for adding a finishing touch to both casual and formal outfits.",
-        rating: 4.5
-    },
-    {
-        id: 11,
-        name: "Formal Shirt",
-        price: 69.99,
-        image: "./assets/tshirt.webp",
-        category: "Men",
-        sizes: ["15", "15.5", "16", "16.5", "17"],
-        colors: ["White", "Light Blue", "Pink", "Black"],
-        description: "This crisp formal shirt is tailored from premium cotton for exceptional comfort and a polished look. The versatile design makes it perfect for both professional settings and special occasions.",
-        rating: 4.6
-    },
-    {
-        id: 12,
-        name: "Designer Sunglasses",
-        price: 119.99,
-        image: "./assets/hat.jpg",
-        category: "Accessories",
-        sizes: ["One Size"],
-        colors: ["Black/Gold", "Tortoise", "Clear/Silver"],
-        description: "Protect your eyes in style with these premium sunglasses featuring UV protection and a fashionable design. The lightweight frame ensures comfort for all-day wear.",
-        rating: 4.7
-    },
-    {
-        id: 13,
-        name: "Cotton Blouse",
-        price: 45.99,
-        image: "./assets/dress.webp",
-        category: "Women",
-        sizes: ["XS", "S", "M", "L", "XL"],
-        colors: ["White", "Blue", "Pink", "Black"],
-        description: "This elegant cotton blouse combines comfort with sophistication. The breathable fabric and timeless design make it perfect for both casual days and office wear.",
-        rating: 4.4
-    },
-    {
-        id: 14,
-        name: "Chino Pants",
-        price: 59.99,
-        image: "./assets/jeans.webp",
-        category: "Men",
-        sizes: ["28", "30", "32", "34", "36", "38"],
-        colors: ["Khaki", "Navy", "Olive", "Black"],
-        description: "These versatile chino pants offer a perfect blend of comfort and style. Made from premium cotton with a hint of stretch, they transition seamlessly from casual to smart-casual occasions.",
-        rating: 4.5
-    },
-    {
-        id: 15,
-        name: "Leather Handbag",
-        price: 159.99,
-        image: "./assets/bracelet.webp",
-        category: "Accessories",
-        sizes: ["One Size"],
-        colors: ["Black", "Brown", "Red", "Navy"],
-        description: "Crafted from genuine leather, this elegant handbag combines practicality with timeless style. The spacious interior and multiple compartments keep your essentials organized.",
-        rating: 4.8
-    },
-    {
-        id: 16,
-        name: "Knit Cardigan",
-        price: 75.99,
-        image: "./assets/dress.webp",
-        category: "Women",
-        sizes: ["XS", "S", "M", "L"],
-        colors: ["Gray", "Beige", "Black", "Burgundy"],
-        description: "This cozy knit cardigan is perfect for layering during cooler seasons. The soft yarn and relaxed fit provide comfort while adding a touch of elegance to any outfit.",
-        rating: 4.6
-    }
-];
+// Product data will be loaded from JSON
+let products = [];
+
+// Fetch products from JSON file
+async function fetchProducts() {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const response = await fetch('products.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            products = await response.json();
+            console.log(`Loaded ${products.length} products from JSON`);
+            
+            // Initialize the products on the page if we're on a product listing page
+            if (document.getElementById('women-products-grid') || 
+                document.getElementById('men-products-grid') || 
+                document.getElementById('new-products-grid') || 
+                document.getElementById('accessories-products-grid') || 
+                document.getElementById('all-products-grid')) {
+                initializeProducts();
+            }
+            
+            resolve(products);
+        } catch (error) {
+            console.error('Error loading products:', error);
+            reject(error);
+        }
+    });
+}
 
 // Cart functionality
 let cart = [];
@@ -565,6 +416,18 @@ function addMobileMenuButton() {
     navContainer.insertBefore(mobileMenuButton, navContainer.firstChild);
 }
 
+// Function to check if a product is new (less than 1 week old)
+function isNewProduct(product) {
+    const publishDate = new Date(product.publishDate);
+    
+    // Use 5/22/2025 as the reference date
+    const currentDate = new Date('2025-05-22');
+    const oneWeekAgo = new Date('2025-05-22');
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+    
+    return publishDate >= oneWeekAgo;
+}
+
 // Display products by category
 function displayProductsByCategory(category, containerId) {
     const productGrid = document.getElementById(containerId);
@@ -572,7 +435,15 @@ function displayProductsByCategory(category, containerId) {
     
     productGrid.innerHTML = '';
     
-    const filteredProducts = products.filter(product => product.category === category);
+    let filteredProducts;
+    
+    if (category === 'New') {
+        // For the "New" category, filter products by date
+        filteredProducts = products.filter(product => isNewProduct(product));
+    } else {
+        // For other categories, filter by category name
+        filteredProducts = products.filter(product => product.category === category);
+    }
     
     filteredProducts.forEach(product => {
         createProductCard(product, productGrid);
@@ -606,11 +477,25 @@ function createProductCard(product, container) {
         }
     });
     
+    // Create and add image container with potential new badge
+    const imgContainer = document.createElement('div');
+    imgContainer.className = 'product-image-container';
+    
+    // Add "New" badge if product is new
+    if (isNewProduct(product)) {
+        const newBadge = document.createElement('span');
+        newBadge.className = 'new-badge';
+        newBadge.textContent = 'NEW';
+        imgContainer.appendChild(newBadge);
+    }
+    
     // Create and add image
     const img = document.createElement('img');
     img.src = product.image;
     img.alt = product.name;
-    productCard.appendChild(img);
+    imgContainer.appendChild(img);
+    
+    productCard.appendChild(imgContainer);
     
     // Create and add product name
     const name = document.createElement('h3');
@@ -873,24 +758,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCartIcon();
     updateCartDisplay();
     
-    // Display products based on current page
-    const womenProductsGrid = document.getElementById('women-products-grid');
-    const menProductsGrid = document.getElementById('men-products-grid');
-    const allProductsGrid = document.getElementById('all-products-grid');
-    
-    if (womenProductsGrid) {
-        console.log("Displaying women's products");
-        displayProductsByCategory('Women', 'women-products-grid');
-    } else if (menProductsGrid) {
-        console.log("Displaying men's products");
-        displayProductsByCategory('Men', 'men-products-grid');
-    } else if (allProductsGrid) {
-        console.log("Displaying all products");
-        displayProducts();
-    } else {
-        console.log("No product grid found on page");
-    }
-    
     // Add mobile menu button
     addMobileMenuButton();
     
@@ -1038,131 +905,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     `;
     document.head.appendChild(quantityStyle);
+    
+    // Fetch products from JSON
+    fetchProducts();
 });
 
-// Add CSS for notifications and mobile menu
-const style = document.createElement('style');
-style.textContent = `
-    .notification {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background-color: #000;
-        color: white;
-        padding: 1rem 2rem;
-        font-family: "Times New Roman", Times, serif;
-        font-size: 0.9rem;
-        letter-spacing: 1px;
-        animation: slideIn 0.3s ease-out;
+// Function to initialize products on the page after data is loaded
+function initializeProducts() {
+    // Display products based on current page
+    const womenProductsGrid = document.getElementById('women-products-grid');
+    const menProductsGrid = document.getElementById('men-products-grid');
+    const newProductsGrid = document.getElementById('new-products-grid');
+    const accessoriesProductsGrid = document.getElementById('accessories-products-grid');
+    const allProductsGrid = document.getElementById('all-products-grid');
+    
+    if (womenProductsGrid) {
+        console.log("Displaying women's products");
+        displayProductsByCategory('Women', 'women-products-grid');
+    } else if (menProductsGrid) {
+        console.log("Displaying men's products");
+        displayProductsByCategory('Men', 'men-products-grid');
+    } else if (newProductsGrid) {
+        console.log("Displaying new products");
+        displayProductsByCategory('New', 'new-products-grid');
+    } else if (accessoriesProductsGrid) {
+        console.log("Displaying accessories");
+        displayProductsByCategory('Accessories', 'accessories-products-grid');
+    } else if (allProductsGrid) {
+        console.log("Displaying all products");
+        displayProducts();
+    } else {
+        console.log("No product grid found on page");
     }
-
-    @keyframes slideIn {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-
-    .mobile-menu-button {
-        display: none;
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        color: #000;
-        cursor: pointer;
-        font-family: "Times New Roman", Times, serif;
-    }
-
-    @media (max-width: 768px) {
-        .mobile-menu-button {
-            display: block;
-        }
-
-        .nav-links {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background-color: white;
-            padding: 2rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .nav-links.active {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .nav-links li {
-            margin: 1.5rem 0;
-        }
-    }
-
-    .product-card {
-        background: white;
-        border-radius: 0;
-        padding: 0;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        position: relative;
-        cursor: pointer;
-    }
-
-    .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-
-    .product-card img {
-        width: 100%;
-        height: 400px;
-        object-fit: cover;
-    }
-
-    .product-card h3 {
-        margin: 1rem 0;
-        font-family: "Times New Roman", Times, serif;
-        font-weight: 400;
-        font-size: 0.9rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        padding: 0 1.5rem;
-    }
-
-    .price {
-        color: #000;
-        font-weight: 400;
-        margin-bottom: 1rem;
-        font-size: 0.9rem;
-        padding: 0 1.5rem;
-        font-family: "Times New Roman", Times, serif;
-    }
-
-    .add-to-cart {
-        width: calc(100% - 3rem);
-        margin: 0 1.5rem 1.5rem;
-        padding: 0.8rem;
-        background-color: #000;
-        color: white;
-        border: none;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-size: 0.8rem;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        font-family: "Times New Roman", Times, serif;
-    }
-
-    .add-to-cart:hover {
-        background-color: #333;
-    }
-`;
-document.head.appendChild(style);
+}
 
 // Show product options modal for selecting size and color
 function showProductOptionsModal(productId, buttonElement) {
@@ -1461,6 +1236,13 @@ function generateStarRating(rating) {
 
 // Display product details on product page
 function displayProductDetails(productId) {
+    // If products haven't loaded yet, wait for them
+    if (products.length === 0) {
+        console.log("Products not loaded yet, waiting to display details");
+        setTimeout(() => displayProductDetails(productId), 100);
+        return;
+    }
+    
     // Convert productId from string to number
     productId = parseInt(productId);
     
@@ -1469,6 +1251,7 @@ function displayProductDetails(productId) {
     
     // If product not found, redirect to home page
     if (!product) {
+        console.error(`Product with ID ${productId} not found`);
         window.location.href = 'index.html';
         return;
     }
@@ -1739,3 +1522,157 @@ function displayProductDetails(productId) {
     `;
     document.head.appendChild(productDetailStyle);
 }
+
+// Add CSS for notifications and mobile menu
+const style = document.createElement('style');
+style.textContent = `
+    .notification {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #000;
+        color: white;
+        padding: 1rem 2rem;
+        font-family: "Times New Roman", Times, serif;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    .mobile-menu-button {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #000;
+        cursor: pointer;
+        font-family: "Times New Roman", Times, serif;
+    }
+
+    /* Add padding for category pages */
+    .women-products, .men-products, .accessories-products, .new-products {
+        margin-top: 60px !important;
+        padding-top: 1rem;
+    }
+
+    /* Add padding for main page featured products */
+    .featured-products {
+        padding-top: 3rem;
+    }
+
+    @media (max-width: 768px) {
+        .mobile-menu-button {
+            display: block;
+        }
+
+        .nav-links {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: white;
+            padding: 2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .nav-links.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .nav-links li {
+            margin: 1.5rem 0;
+        }
+    }
+
+    .product-card {
+        background: white;
+        border-radius: 0;
+        padding: 0;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .product-image-container {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .new-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: #000;
+        color: white;
+        padding: 5px 10px;
+        font-size: 0.7rem;
+        font-weight: bold;
+        letter-spacing: 1px;
+        z-index: 2;
+        font-family: "Times New Roman", Times, serif;
+    }
+
+    .product-card img {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+    }
+
+    .product-card h3 {
+        margin: 1rem 0;
+        font-family: "Times New Roman", Times, serif;
+        font-weight: 400;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 0 1.5rem;
+    }
+
+    .price {
+        color: #000;
+        font-weight: 400;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        padding: 0 1.5rem;
+        font-family: "Times New Roman", Times, serif;
+    }
+
+    .add-to-cart {
+        width: calc(100% - 3rem);
+        margin: 0 1.5rem 1.5rem;
+        padding: 0.8rem;
+        background-color: #000;
+        color: white;
+        border: none;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        font-family: "Times New Roman", Times, serif;
+    }
+
+    .add-to-cart:hover {
+        background-color: #333;
+    }
+`;
+document.head.appendChild(style);

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Details - Zagger</title>
+    <title>New Arrivals - Zagger</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -12,7 +12,7 @@
         <nav class="nav-container">
             <div class="logo"><a href="index.html">ZAGGER</a></div>
             <ul class="nav-links">
-                <li><a href="new.html">NEW</a></li>
+                <li><a href="new.html" class="active">NEW</a></li>
                 <li><a href="women.html">WOMEN</a></li>
                 <li><a href="men.html">MEN</a></li>
                 <li><a href="accessories.html">ACCESSORIES</a></li>
@@ -27,8 +27,11 @@
     </header>
 
     <main>
-        <section class="product-details-container" id="product-details">
-            <!-- Product details will be loaded dynamically -->
+        <section class="featured-products new-products">
+            <h2>NEW ARRIVALS</h2>
+            <div class="product-grid" id="new-products-grid">
+                <!-- Products will be loaded dynamically -->
+            </div>
         </section>
     </main>
 
@@ -79,23 +82,8 @@
     <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Get product ID from URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const productId = urlParams.get('id');
-            
-            if (productId) {
-                // First fetch products, then display details
-                fetchProducts().then(() => {
-                    displayProductDetails(productId);
-                }).catch(error => {
-                    console.error('Error loading products:', error);
-                    window.location.href = 'index.html';
-                });
-            } else {
-                // If no product ID, redirect to home page
-                window.location.href = 'index.html';
-            }
+            displayProductsByCategory('New', 'new-products-grid');
         });
     </script>
 </body>
-</html>
+</html> 
