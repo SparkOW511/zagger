@@ -138,7 +138,8 @@ function updateCartDisplay(highlightItemId = null, openCart = false) {
     cartItems.innerHTML = '';
     
     cart.forEach((item, index) => {
-        total += item.price * item.quantity;
+        // Use salePrice instead of price for calculations
+        total += item.salePrice * item.quantity;
         
         const cartItem = document.createElement('div');
         cartItem.className = 'cart-item';
@@ -148,11 +149,19 @@ function updateCartDisplay(highlightItemId = null, openCart = false) {
             cartItem.classList.add('new-item');
         }
         
+        // Format price display based on sale status
+        let priceDisplay = '';
+        if (item.price !== item.salePrice) {
+            priceDisplay = `<span class="original-price">$${item.price.toFixed(2)}</span> <span class="sale-price">$${item.salePrice.toFixed(2)}</span>`;
+        } else {
+            priceDisplay = `$${item.price.toFixed(2)}`;
+        }
+        
         cartItem.innerHTML = `
             <img src="${item.image}" alt="${item.name}" class="cart-item-image">
             <div class="cart-item-details">
                 <h3 class="cart-item-name">${item.name}</h3>
-                <p class="cart-item-price">$${item.price.toFixed(2)}</p>
+                <p class="cart-item-price">${priceDisplay}</p>
                 <p class="cart-item-variant">${item.selectedColor}${item.selectedSize ? ', Size ' + item.selectedSize : ''}</p>
                 <div class="quantity-controls">
                     <button class="quantity-btn minus" onclick="updateQuantity(${index}, -1)">-</button>
@@ -505,7 +514,20 @@ function createProductCard(product, container) {
     // Create and add price
     const price = document.createElement('p');
     price.className = 'price';
-    price.textContent = `$${product.price.toFixed(2)}`;
+    
+    // Check if product is on sale
+    if (product.price !== product.salePrice) {
+        price.innerHTML = `<span class="original-price">$${product.price.toFixed(2)}</span> <span class="sale-price">$${product.salePrice.toFixed(2)}</span>`;
+        
+        // Add sale badge if on sale
+        const saleBadge = document.createElement('span');
+        saleBadge.className = 'sale-badge';
+        saleBadge.textContent = 'SALE';
+        imgContainer.appendChild(saleBadge);
+    } else {
+        price.textContent = `$${product.price.toFixed(2)}`;
+    }
+    
     productCard.appendChild(price);
     
     // Create button container to isolate button from card hover effects
@@ -617,8 +639,13 @@ function addToCart(productId, buttonElement = null, selectedSize = '', selectedC
         // Increment quantity if product already in cart with same size and color
         cart[existingItemIndex].quantity += 1;
     } else {
-        // Add new product with quantity 1
-        const cartItem = { ...product, quantity: 1, selectedSize: size, selectedColor: color };
+        // Add new product with quantity 1, making sure to include price and salePrice
+        const cartItem = { 
+            ...product, 
+            quantity: 1, 
+            selectedSize: size, 
+            selectedColor: color 
+        };
         cart.push(cartItem);
     }
     
@@ -957,7 +984,15 @@ function showProductOptionsModal(productId, buttonElement) {
     
     // Set product details in modal
     modal.querySelector('.product-options-name').textContent = product.name;
-    modal.querySelector('.product-options-price').textContent = `$${product.price.toFixed(2)}`;
+    
+    // Format price display based on sale status
+    const priceContainer = modal.querySelector('.product-options-price');
+    if (product.price !== product.salePrice) {
+        priceContainer.innerHTML = `<span class="original-price">$${product.price.toFixed(2)}</span> <span class="sale-price">$${product.salePrice.toFixed(2)}</span>`;
+    } else {
+        priceContainer.textContent = `$${product.price.toFixed(2)}`;
+    }
+    
     modal.querySelector('.product-options-image').src = product.image;
     
     // Generate color options
@@ -1263,11 +1298,26 @@ function displayProductDetails(productId) {
     // Update page title
     document.title = `${product.name} - Zagger`;
     
+    // Format price display based on sale status
+    let priceHTML = '';
+    if (product.price !== product.salePrice) {
+        priceHTML = `
+            <p class="product-detail-price">
+                <span class="original-price">$${product.price.toFixed(2)}</span>
+                <span class="sale-price">$${product.salePrice.toFixed(2)}</span>
+                <span class="sale-label">SALE</span>
+            </p>
+        `;
+    } else {
+        priceHTML = `<p class="product-detail-price">$${product.price.toFixed(2)}</p>`;
+    }
+    
     // Create product details HTML
     const productDetailsHTML = `
         <div class="product-detail-layout">
             <div class="product-image-container">
                 <img src="${product.image}" alt="${product.name}" class="product-detail-image">
+                ${isNewProduct(product) ? '<span class="new-badge">NEW</span>' : ''}
             </div>
             <div class="product-info-container">
                 <h1 class="product-detail-name">${product.name}</h1>
@@ -1275,7 +1325,7 @@ function displayProductDetails(productId) {
                     ${generateStarRating(product.rating)}
                     <span class="rating-value">${product.rating.toFixed(1)}</span>
                 </div>
-                <p class="product-detail-price">$${product.price.toFixed(2)}</p>
+                ${priceHTML}
                 <p class="product-detail-category">Category: ${product.category}</p>
                 
                 <div class="product-detail-options">
@@ -1376,6 +1426,7 @@ function displayProductDetails(productId) {
         .product-image-container {
             flex: 1;
             min-width: 300px;
+            position: relative;
         }
         
         .product-detail-image {
@@ -1425,6 +1476,27 @@ function displayProductDetails(productId) {
             font-size: 1.2rem;
             margin-bottom: 1rem;
             font-family: "Times New Roman", Times, serif;
+        }
+        
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+            margin-right: 10px;
+        }
+        
+        .sale-price {
+            color: #c00;
+            font-weight: bold;
+        }
+        
+        .sale-label {
+            display: inline-block;
+            background-color: #c00;
+            color: white;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            margin-left: 10px;
+            vertical-align: middle;
         }
         
         .product-detail-category {
@@ -1630,6 +1702,20 @@ style.textContent = `
         z-index: 2;
         font-family: "Times New Roman", Times, serif;
     }
+    
+    .sale-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: #c00;
+        color: white;
+        padding: 5px 10px;
+        font-size: 0.7rem;
+        font-weight: bold;
+        letter-spacing: 1px;
+        z-index: 2;
+        font-family: "Times New Roman", Times, serif;
+    }
 
     .product-card img {
         width: 100%;
@@ -1654,6 +1740,17 @@ style.textContent = `
         font-size: 0.9rem;
         padding: 0 1.5rem;
         font-family: "Times New Roman", Times, serif;
+    }
+    
+    .original-price {
+        text-decoration: line-through;
+        color: #999;
+        margin-right: 10px;
+    }
+    
+    .sale-price {
+        color: #c00;
+        font-weight: bold;
     }
 
     .add-to-cart {
