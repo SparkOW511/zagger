@@ -55,11 +55,11 @@ function toggleCart() {
     if (cartSidebar.classList.contains('active')) {
         cartSidebar.classList.remove('active');
         overlay.classList.remove('active');
-        document.body.style.overflow = 'auto';
+        document.body.classList.remove('no-scroll');
     } else {
         cartSidebar.classList.add('active');
         overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        document.body.classList.add('no-scroll');
         updateCartDisplay();
     }
 }
@@ -72,11 +72,11 @@ function toggleUserAccount() {
     if (accountSidebar.classList.contains('active')) {
         accountSidebar.classList.remove('active');
         overlay.classList.remove('active');
-        document.body.style.overflow = 'auto';
+        document.body.classList.remove('no-scroll');
     } else {
         accountSidebar.classList.add('active');
         overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        document.body.classList.add('no-scroll');
     }
 }
 
@@ -193,7 +193,7 @@ function updateCartDisplay(highlightItemId = null, openCart = false) {
         if (cartSidebar && overlay) {
             cartSidebar.classList.add('active');
             overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            document.body.classList.add('no-scroll');
         }
     }
 }
@@ -665,10 +665,23 @@ function addToCart(productId, buttonElement = null, selectedSize = '', selectedC
     }
 }
 
+// Function to ensure scrolling is restored
+function ensureScrollingIsRestored() {
+    // Remove no-scroll class from body to ensure scrolling is enabled
+    document.body.classList.remove('no-scroll');
+    
+    // Also ensure the style.overflow is set to auto for backward compatibility
+    document.body.style.overflow = 'auto';
+    
+    console.log('Scrolling restored');
+}
+
 // Initialize when document is ready
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM loaded");
 
+    // Ensure scrolling is enabled
+    ensureScrollingIsRestored();
     
     // Load cart from local storage
     loadCartFromLocalStorage();
@@ -687,6 +700,22 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Set up authentication modals for all pages
     setupAuthModals();
+    
+    // Add additional event listeners to restore scrolling
+    window.addEventListener('pageshow', ensureScrollingIsRestored);
+    window.addEventListener('popstate', ensureScrollingIsRestored);
+    
+    // Fail-safe: when user clicks anywhere on the page, ensure scrolling is possible
+    // Add a small delay to ensure this happens after any modal close operations
+    document.addEventListener('click', function() {
+        setTimeout(function() {
+            // Only restore scrolling if no active modals are present
+            const activeModals = document.querySelectorAll('.form-modal.active, .cart-sidebar.active, .account-sidebar.active, .search-slider.active');
+            if (activeModals.length === 0) {
+                ensureScrollingIsRestored();
+            }
+        }, 100);
+    });
 });
 
 // Function to initialize products on the page after data is loaded
@@ -828,13 +857,13 @@ function showProductOptionsModal(productId, buttonElement) {
     overlay.style.display = 'block';
     
     // Prevent body scrolling
-    document.body.style.overflow = 'hidden';
+    document.body.classList.add('no-scroll');
     
     // Function to close the modal
     function closeOptionsModal() {
         modal.style.display = 'none';
         overlay.style.display = 'none';
-        document.body.style.overflow = 'auto';
+        document.body.classList.remove('no-scroll');
     }
     
     // Add modal styles if they don't exist
@@ -1739,11 +1768,11 @@ function toggleSearch() {
     if (searchSlider.classList.contains('active')) {
         searchSlider.classList.remove('active');
         overlay.classList.remove('active');
-        document.body.style.overflow = 'auto';
+        document.body.classList.remove('no-scroll');
     } else {
         searchSlider.classList.add('active');
         overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        document.body.classList.add('no-scroll');
         document.querySelector('.search-input').focus();
         
         // Load top rated products if not already loaded
@@ -2162,7 +2191,7 @@ function setupAuthModals() {
             // Open join modal
             joinModal.classList.add('active');
             joinOverlay.classList.add('active');
-            document.body.classList.add('no-scroll');
+            // Keep no-scroll class since we're opening another modal
         });
         
         // Switch from sign in to join form
@@ -2174,6 +2203,7 @@ function setupAuthModals() {
             // Open join modal
             joinModal.classList.add('active');
             joinOverlay.classList.add('active');
+            // Keep no-scroll class since we're opening another modal
         });
         
         // Switch from join to sign in form
@@ -2185,6 +2215,7 @@ function setupAuthModals() {
             // Open sign in modal
             signinModal.classList.add('active');
             signinOverlay.classList.add('active');
+            // Keep no-scroll class since we're opening another modal
         });
         
         // Close modals
@@ -2210,6 +2241,24 @@ function setupAuthModals() {
             joinModal.classList.remove('active');
             joinOverlay.classList.remove('active');
             document.body.classList.remove('no-scroll');
+        });
+        
+        // Close modals when pressing Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                // Check which modal is active and close it
+                if (signinModal.classList.contains('active')) {
+                    signinModal.classList.remove('active');
+                    signinOverlay.classList.remove('active');
+                    document.body.classList.remove('no-scroll');
+                }
+                
+                if (joinModal.classList.contains('active')) {
+                    joinModal.classList.remove('active');
+                    joinOverlay.classList.remove('active');
+                    document.body.classList.remove('no-scroll');
+                }
+            }
         });
         
         // Toggle password visibility
@@ -2238,12 +2287,22 @@ function setupAuthModals() {
             e.preventDefault();
             // Add sign in logic here
             console.log('Sign in submitted');
+            
+            // Close modal and restore scrolling
+            signinModal.classList.remove('active');
+            signinOverlay.classList.remove('active');
+            document.body.classList.remove('no-scroll');
         });
         
         document.getElementById('join-form').addEventListener('submit', (e) => {
             e.preventDefault();
             // Add join logic here
             console.log('Join submitted');
+            
+            // Close modal and restore scrolling
+            joinModal.classList.remove('active');
+            joinOverlay.classList.remove('active');
+            document.body.classList.remove('no-scroll');
         });
     }
     

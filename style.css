@@ -1115,7 +1115,7 @@ body {
 }
 
 .no-scroll {
-    overflow: hidden;
+    overflow: hidden !important;
 }
 
 /* Account Sidebar modifications */
