@@ -665,57 +665,281 @@ function addToCart(productId, buttonElement = null, selectedSize = '', selectedC
     }
 }
 
-// Function to ensure scrolling is restored
-function ensureScrollingIsRestored() {
-    // Remove no-scroll class from body to ensure scrolling is enabled
-    document.body.classList.remove('no-scroll');
-    
-    // Also ensure the style.overflow is set to auto for backward compatibility
-    document.body.style.overflow = 'auto';
-    
-    console.log('Scrolling restored');
-}
-
-// Initialize when document is ready
+// Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM loaded");
-
-    // Ensure scrolling is enabled
-    ensureScrollingIsRestored();
     
     // Load cart from local storage
     loadCartFromLocalStorage();
     
-    // Load products from JSON
-    fetchProducts();
+    // Add cart sidebar HTML
+    const cartHTML = `
+        <div class="cart-overlay"></div>
+        <div class="cart-sidebar">
+            <div class="cart-header">
+                <h2>Shopping Cart</h2>
+                <button class="close-cart">&times;</button>
+            </div>
+            <div class="cart-items"></div>
+            <p class="empty-cart-message">Your cart is empty</p>
+            
+            <!-- Normal cart footer -->
+            <div class="cart-footer" id="cart-normal-footer">
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span class="cart-total-value">$0.00</span>
+                </div>
+                <div class="cart-buttons">
+                    <button class="empty-cart-btn">Empty Cart</button>
+                    <button class="checkout-btn">Checkout</button>
+                </div>
+            </div>
+            
+            <!-- Empty cart confirmation -->
+            <div class="cart-footer cart-confirm-footer" id="cart-confirm-footer" style="display: none;">
+                <div class="confirm-message">
+                    <p>Are you sure you want to empty your cart?</p>
+                </div>
+                <div class="cart-buttons">
+                    <button class="cancel-empty-btn">Cancel</button>
+                    <button class="confirm-empty-btn">Confirm</button>
+                </div>
+            </div>
+        </div>
+    `;
     
-    // Set up cart events
+    // Product options modal HTML
+    const productOptionsHTML = `
+        <div class="product-options-overlay" style="display: none;"></div>
+        <div class="product-options-modal" style="display: none;">
+            <div class="product-options-header">
+                <h3>Select Options</h3>
+                <button class="close-options">&times;</button>
+            </div>
+            <div class="product-options-content">
+                <div class="product-options-info">
+                    <img class="product-options-image" src="" alt="Product Image">
+                    <div class="product-options-details">
+                        <h4 class="product-options-name"></h4>
+                        <p class="product-options-price"></p>
+                    </div>
+                </div>
+                
+                <div class="product-options-selections">
+                    <div class="color-selection">
+                        <h3>Color</h3>
+                        <div class="options-color-list"></div>
+                    </div>
+                    
+                    <div class="size-selection">
+                        <h3>Size</h3>
+                        <div class="options-size-list"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="product-options-footer">
+                <button class="add-to-cart-with-options">Add to Cart</button>
+            </div>
+        </div>
+    `;
+    
+    // Add user account sidebar HTML
+    const accountHTML = `
+        <div class="account-overlay"></div>
+        <div class="account-sidebar">
+            <div class="account-header">
+                <h2>My Account</h2>
+                <button class="close-account">&times;</button>
+            </div>
+            <div class="account-content">
+                <button class="account-btn sign-in-btn">Sign In</button>
+                <button class="account-btn join-btn">Join</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', cartHTML);
+    document.body.insertAdjacentHTML('beforeend', accountHTML);
+    document.body.insertAdjacentHTML('beforeend', productOptionsHTML);
+    
+    // Add empty cart button functionality
+    const emptyCartBtn = document.querySelector('.empty-cart-btn');
+    if (emptyCartBtn) {
+        emptyCartBtn.addEventListener('click', emptyCart);
+    }
+    
+    // Add cancel and confirm buttons functionality
+    const cancelEmptyBtn = document.querySelector('.cancel-empty-btn');
+    const confirmEmptyBtn = document.querySelector('.confirm-empty-btn');
+    
+    if (cancelEmptyBtn) {
+        cancelEmptyBtn.addEventListener('click', toggleEmptyCartConfirm);
+    }
+    
+    if (confirmEmptyBtn) {
+        confirmEmptyBtn.addEventListener('click', confirmEmptyCart);
+    }
+    
+    // Initialize cart
     setupCartEvents();
     
-    // Add mobile menu button if needed
-    addMobileMenuButton();
-    
-    // Set up search events
+    // Setup search functionality
     setupSearchEvents();
     
-    // Set up authentication modals for all pages
-    setupAuthModals();
+    // Update cart icon and display with items from local storage
+    updateCartIcon();
+    updateCartDisplay();
     
-    // Add additional event listeners to restore scrolling
-    window.addEventListener('pageshow', ensureScrollingIsRestored);
-    window.addEventListener('popstate', ensureScrollingIsRestored);
+    // Add mobile menu button
+    addMobileMenuButton();
     
-    // Fail-safe: when user clicks anywhere on the page, ensure scrolling is possible
-    // Add a small delay to ensure this happens after any modal close operations
-    document.addEventListener('click', function() {
-        setTimeout(function() {
-            // Only restore scrolling if no active modals are present
-            const activeModals = document.querySelectorAll('.form-modal.active, .cart-sidebar.active, .account-sidebar.active, .search-slider.active');
-            if (activeModals.length === 0) {
-                ensureScrollingIsRestored();
+    // Add smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth'
+                });
             }
-        }, 100);
+        });
     });
+    
+    // Add CSS for quantity controls
+    const quantityStyle = document.createElement('style');
+    quantityStyle.textContent = `
+        .cart-item-variant {
+            font-size: 0.8rem;
+            color: #666;
+            margin: 0.2rem 0 0.5rem;
+            font-style: italic;
+            font-family: "Times New Roman", Times, serif;
+        }
+    
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            margin: 0.5rem 0;
+        }
+        
+        .quantity-btn {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-family: "Times New Roman", Times, serif;
+        }
+        
+        .quantity-btn:hover {
+            background: #eaeaea;
+        }
+        
+        .item-quantity {
+            margin: 0 0.5rem;
+            min-width: 20px;
+            text-align: center;
+        }
+        
+        .cart-buttons {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .checkout-btn, .empty-cart-btn {
+            padding: 0.8rem;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-family: "Times New Roman", Times, serif;
+            border: none;
+            text-transform: uppercase;
+        }
+        
+        .checkout-btn {
+            background-color: #000;
+            color: white;
+            flex: 2;
+        }
+        
+        .empty-cart-btn {
+            background-color: #f5f5f5;
+            color: #333;
+            flex: 1;
+            border: 1px solid #ddd;
+        }
+        
+        .checkout-btn:hover {
+            background-color: #333;
+        }
+        
+        .empty-cart-btn:hover {
+            background-color: #eaeaea;
+        }
+        
+        .cart-confirm-footer {
+            background-color: #f8f8f8;
+            border-top: 1px solid #eee;
+        }
+        
+        .confirm-message {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-family: "Times New Roman", Times, serif;
+        }
+        
+        .confirm-message p {
+            margin: 0;
+            padding: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .cancel-empty-btn {
+            background-color: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+            flex: 1;
+            padding: 0.8rem;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-family: "Times New Roman", Times, serif;
+            text-transform: uppercase;
+        }
+        
+        .confirm-empty-btn {
+            background-color: #c00;
+            color: white;
+            border: none;
+            flex: 1;
+            padding: 0.8rem;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-family: "Times New Roman", Times, serif;
+            text-transform: uppercase;
+        }
+        
+        .cancel-empty-btn:hover {
+            background-color: #eaeaea;
+        }
+        
+        .confirm-empty-btn:hover {
+            background-color: #a00;
+        }
+    `;
+    document.head.appendChild(quantityStyle);
+    
+    // Fetch products from JSON
+    fetchProducts();
 });
 
 // Function to initialize products on the page after data is loaded
@@ -1981,331 +2205,4 @@ function displaySimilarProducts(product) {
     similarProducts.forEach(similarProduct => {
         createProductCard(similarProduct, similarProductsContainer);
     });
-}
-
-// Create and initialize authentication modals
-function setupAuthModals() {
-    // Check if modals already exist
-    if (document.getElementById('signin-modal')) return;
-    
-    // Create account sidebar HTML
-    const accountHtml = `
-        <div class="account-overlay"></div>
-        <div class="account-sidebar">
-            <div class="account-header">
-                <h2>My Account</h2>
-                <button class="close-account">&times;</button>
-            </div>
-            <div class="account-content">
-                <button id="signin-btn" class="account-btn sign-in-btn">Sign In</button>
-                <button id="join-btn" class="account-btn join-btn">Join</button>
-            </div>
-        </div>
-    `;
-    
-    // Create sign in modal HTML
-    const signinModalHtml = `
-        <div class="modal-overlay" id="signin-modal-overlay"></div>
-        <div class="form-modal" id="signin-modal">
-            <div class="modal-header">
-                <h2>Sign In</h2>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-content">
-                <h3>Sign in to Zagger</h3>
-                <p class="modal-subtitle">to get rewarded.</p>
-                
-                <div class="benefits-row">
-                    <div class="benefit-item">
-                        <div class="benefit-icon">
-                            <i class="fas fa-lock"></i>
-                        </div>
-                        <p>Exclusive offers<br>and rewards</p>
-                    </div>
-                    <div class="benefit-item">
-                        <div class="benefit-icon">
-                            <i class="fas fa-tshirt"></i>
-                        </div>
-                        <p>Personalized<br>recommendations</p>
-                    </div>
-                    <div class="benefit-item">
-                        <div class="benefit-icon">
-                            <i class="far fa-clock"></i>
-                        </div>
-                        <p>Early access to<br>new arrivals</p>
-                    </div>
-                </div>
-                
-                <form id="signin-form">
-                    <div class="form-group light-bg">
-                        <label for="signin-email">Email</label>
-                        <input type="email" id="signin-email" required>
-                    </div>
-                    <div class="form-group light-bg">
-                        <label for="signin-password">Password</label>
-                        <div class="password-field">
-                            <input type="password" id="signin-password" required>
-                            <button type="button" class="toggle-password"><i class="far fa-eye"></i></button>
-                        </div>
-                    </div>
-                    
-                    <div class="form-check-row">
-                        <div class="form-check">
-                            <input type="checkbox" id="signin-remember">
-                            <label for="signin-remember">Keep Me Signed In</label>
-                        </div>
-                        <a href="#" class="help-icon"><i class="far fa-question-circle"></i></a>
-                    </div>
-                    
-                    <button type="submit" class="primary-button">Sign In</button>
-                    <button type="button" id="go-to-join" class="secondary-button">Join Zagger</button>
-                    
-                    <div class="form-link centered">
-                        <a href="#forgot-password">Forgot Password?</a>
-                    </div>
-                </form>
-            </div>
-        </div>
-    `;
-    
-    // Create join modal HTML
-    const joinModalHtml = `
-        <div class="modal-overlay" id="join-modal-overlay"></div>
-        <div class="form-modal" id="join-modal">
-            <div class="modal-header">
-                <h2>Join</h2>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-content">
-                <h3>Join Zagger</h3>
-                <p class="modal-subtitle">to get exceptional benefits like:</p>
-                
-                <div class="benefits-row">
-                    <div class="benefit-item">
-                        <div class="benefit-icon">
-                            <i class="fas fa-gift"></i>
-                        </div>
-                        <p>Rewards</p>
-                    </div>
-                    <div class="benefit-item">
-                        <div class="benefit-icon">
-                            <i class="fas fa-key"></i>
-                        </div>
-                        <p>Exclusives</p>
-                    </div>
-                    <div class="benefit-item">
-                        <div class="benefit-icon">
-                            <i class="fas fa-shopping-bag"></i>
-                        </div>
-                        <p>Ease</p>
-                    </div>
-                </div>
-                
-                <p class="promo-text">Plus, get €10 off €50 just for joining.</p>
-                
-                <form id="join-form">
-                    <div class="form-group">
-                        <label for="join-email">Email</label>
-                        <input type="email" id="join-email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="join-password">Password</label>
-                        <div class="password-field">
-                            <input type="password" id="join-password" required>
-                            <button type="button" class="toggle-password"><i class="far fa-eye"></i></button>
-                        </div>
-                    </div>
-                    
-                    <p class="password-requirements">Password must be 8-25 characters and contain numbers and letters</p>
-                    <div class="password-strength">
-                        <div class="strength-bar"></div>
-                        <div class="strength-bar"></div>
-                        <div class="strength-bar"></div>
-                        <div class="strength-bar"></div>
-                    </div>
-                    <p class="strength-text">Must meet password requirements</p>
-                    
-                    <div class="form-check-row">
-                        <div class="form-check">
-                            <input type="checkbox" id="join-remember">
-                            <label for="join-remember">Keep Me Signed In</label>
-                        </div>
-                        <a href="#" class="help-icon"><i class="far fa-question-circle"></i></a>
-                    </div>
-                    
-                    <button type="submit" class="primary-button">Continue</button>
-                    <button type="button" id="go-to-signin" class="secondary-button">Sign In</button>
-                </form>
-            </div>
-        </div>
-    `;
-    
-    // Append account elements to the body
-    const accountContainer = document.createElement('div');
-    accountContainer.innerHTML = accountHtml;
-    document.body.appendChild(accountContainer);
-    
-    // Append sign in modal to the body
-    const signinContainer = document.createElement('div');
-    signinContainer.innerHTML = signinModalHtml;
-    document.body.appendChild(signinContainer);
-    
-    // Append join modal to the body
-    const joinContainer = document.createElement('div');
-    joinContainer.innerHTML = joinModalHtml;
-    document.body.appendChild(joinContainer);
-    
-    // Set up event listeners for authentication modals
-    function initAuthEvents() {
-        // Form modals functionality
-        const signinBtn = document.getElementById('signin-btn');
-        const joinBtn = document.getElementById('join-btn');
-        const signinModal = document.getElementById('signin-modal');
-        const joinModal = document.getElementById('join-modal');
-        const signinOverlay = document.getElementById('signin-modal-overlay');
-        const joinOverlay = document.getElementById('join-modal-overlay');
-        const closeModalBtns = document.querySelectorAll('.close-modal');
-        const goToJoinBtn = document.getElementById('go-to-join');
-        const goToSigninBtn = document.getElementById('go-to-signin');
-        const accountSidebar = document.querySelector('.account-sidebar');
-        const accountOverlay = document.querySelector('.account-overlay');
-        
-        // Open sign in modal
-        signinBtn.addEventListener('click', () => {
-            // Close account sidebar
-            accountSidebar.classList.remove('active');
-            accountOverlay.classList.remove('active');
-            
-            // Open sign in modal
-            signinModal.classList.add('active');
-            signinOverlay.classList.add('active');
-            document.body.classList.add('no-scroll');
-        });
-        
-        // Open join modal
-        joinBtn.addEventListener('click', () => {
-            // Close account sidebar
-            accountSidebar.classList.remove('active');
-            accountOverlay.classList.remove('active');
-            
-            // Open join modal
-            joinModal.classList.add('active');
-            joinOverlay.classList.add('active');
-            // Keep no-scroll class since we're opening another modal
-        });
-        
-        // Switch from sign in to join form
-        goToJoinBtn.addEventListener('click', () => {
-            // Close sign in modal
-            signinModal.classList.remove('active');
-            signinOverlay.classList.remove('active');
-            
-            // Open join modal
-            joinModal.classList.add('active');
-            joinOverlay.classList.add('active');
-            // Keep no-scroll class since we're opening another modal
-        });
-        
-        // Switch from join to sign in form
-        goToSigninBtn.addEventListener('click', () => {
-            // Close join modal
-            joinModal.classList.remove('active');
-            joinOverlay.classList.remove('active');
-            
-            // Open sign in modal
-            signinModal.classList.add('active');
-            signinOverlay.classList.add('active');
-            // Keep no-scroll class since we're opening another modal
-        });
-        
-        // Close modals
-        closeModalBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const modal = e.target.closest('.form-modal');
-                const overlay = modal.id === 'signin-modal' ? signinOverlay : joinOverlay;
-                
-                modal.classList.remove('active');
-                overlay.classList.remove('active');
-                document.body.classList.remove('no-scroll');
-            });
-        });
-        
-        // Close modals when clicking overlay
-        signinOverlay.addEventListener('click', () => {
-            signinModal.classList.remove('active');
-            signinOverlay.classList.remove('active');
-            document.body.classList.remove('no-scroll');
-        });
-        
-        joinOverlay.addEventListener('click', () => {
-            joinModal.classList.remove('active');
-            joinOverlay.classList.remove('active');
-            document.body.classList.remove('no-scroll');
-        });
-        
-        // Close modals when pressing Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                // Check which modal is active and close it
-                if (signinModal.classList.contains('active')) {
-                    signinModal.classList.remove('active');
-                    signinOverlay.classList.remove('active');
-                    document.body.classList.remove('no-scroll');
-                }
-                
-                if (joinModal.classList.contains('active')) {
-                    joinModal.classList.remove('active');
-                    joinOverlay.classList.remove('active');
-                    document.body.classList.remove('no-scroll');
-                }
-            }
-        });
-        
-        // Toggle password visibility
-        const togglePasswordBtns = document.querySelectorAll('.toggle-password');
-        
-        togglePasswordBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const passwordField = btn.previousElementSibling;
-                const icon = btn.querySelector('i');
-                
-                // Toggle type between password and text
-                if (passwordField.type === 'password') {
-                    passwordField.type = 'text';
-                    icon.classList.remove('fa-eye');
-                    icon.classList.add('fa-eye-slash');
-                } else {
-                    passwordField.type = 'password';
-                    icon.classList.remove('fa-eye-slash');
-                    icon.classList.add('fa-eye');
-                }
-            });
-        });
-        
-        // Form submission
-        document.getElementById('signin-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            // Add sign in logic here
-            console.log('Sign in submitted');
-            
-            // Close modal and restore scrolling
-            signinModal.classList.remove('active');
-            signinOverlay.classList.remove('active');
-            document.body.classList.remove('no-scroll');
-        });
-        
-        document.getElementById('join-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            // Add join logic here
-            console.log('Join submitted');
-            
-            // Close modal and restore scrolling
-            joinModal.classList.remove('active');
-            joinOverlay.classList.remove('active');
-            document.body.classList.remove('no-scroll');
-        });
-    }
-    
-    // Initialize the auth events
-    initAuthEvents();
 }

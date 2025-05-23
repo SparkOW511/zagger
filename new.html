@@ -20,7 +20,7 @@
             </ul>
             <div class="nav-icons">
                 <a href="#search"><i class="fas fa-search"></i></a>
-                <a href="#account"><i class="fas fa-user"></i></a>
+                <a href="#account" id="account-icon"><i class="fas fa-user"></i></a>
                 <a href="#cart"><i class="fas fa-shopping-bag"></i></a>
             </div>
         </nav>
@@ -56,6 +56,152 @@
                     <li><a href="#">Unsubscribe</a></li>
                 </ul>
             </div>
+        </div>
+    </div>
+
+    <!-- Account Sidebar -->
+    <div class="account-overlay"></div>
+    <div class="account-sidebar">
+        <div class="account-header">
+            <h2>My Account</h2>
+            <button class="close-account">&times;</button>
+        </div>
+        <div class="account-content">
+            <button id="signin-btn" class="account-btn sign-in-btn">Sign In</button>
+            <button id="join-btn" class="account-btn join-btn">Join</button>
+        </div>
+    </div>
+
+    <!-- Sign In Modal -->
+    <div class="modal-overlay" id="signin-modal-overlay"></div>
+    <div class="form-modal" id="signin-modal">
+        <div class="modal-header">
+            <h2>Sign In</h2>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-content">
+            <h3>Sign in to Zagger</h3>
+            <p class="modal-subtitle">to get rewarded.</p>
+            
+            <div class="benefits-row">
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <p>Exclusive offers<br>and rewards</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-tshirt"></i>
+                    </div>
+                    <p>Personalized<br>recommendations</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="far fa-clock"></i>
+                    </div>
+                    <p>Early access to<br>new arrivals</p>
+                </div>
+            </div>
+            
+            <form id="signin-form">
+                <div class="form-group light-bg">
+                    <label for="signin-email">Email</label>
+                    <input type="email" id="signin-email" required>
+                </div>
+                <div class="form-group light-bg">
+                    <label for="signin-password">Password</label>
+                    <div class="password-field">
+                        <input type="password" id="signin-password" required>
+                        <button type="button" class="toggle-password"><i class="far fa-eye"></i></button>
+                    </div>
+                </div>
+                
+                <div class="form-check-row">
+                    <div class="form-check">
+                        <input type="checkbox" id="signin-remember">
+                        <label for="signin-remember">Keep Me Signed In</label>
+                    </div>
+                    <a href="#" class="help-icon"><i class="far fa-question-circle"></i></a>
+                </div>
+                
+                <button type="submit" class="primary-button">Sign In</button>
+                <button type="button" id="go-to-join" class="secondary-button">Join Zagger</button>
+                
+                <div class="form-link centered">
+                    <a href="#forgot-password">Forgot Password?</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Join Modal -->
+    <div class="modal-overlay" id="join-modal-overlay"></div>
+    <div class="form-modal" id="join-modal">
+        <div class="modal-header">
+            <h2>Join</h2>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-content">
+            <h3>Join Zagger</h3>
+            <p class="modal-subtitle">to get exceptional benefits like:</p>
+            
+            <div class="benefits-row">
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <p>Rewards</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <p>Exclusives</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <p>Ease</p>
+                </div>
+            </div>
+            
+            <p class="promo-text">Plus, get €10 off €50 just for joining.</p>
+            
+            <form id="join-form">
+                <div class="form-group">
+                    <label for="join-email">Email</label>
+                    <input type="email" id="join-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="join-password">Password</label>
+                    <div class="password-field">
+                        <input type="password" id="join-password" required>
+                        <button type="button" class="toggle-password"><i class="far fa-eye"></i></button>
+                    </div>
+                </div>
+                
+                <p class="password-requirements">Password must be 8-25 characters and contain numbers and letters</p>
+                <div class="password-strength">
+                    <div class="strength-bar"></div>
+                    <div class="strength-bar"></div>
+                    <div class="strength-bar"></div>
+                    <div class="strength-bar"></div>
+                </div>
+                <p class="strength-text">Must meet password requirements</p>
+                
+                <div class="form-check-row">
+                    <div class="form-check">
+                        <input type="checkbox" id="join-remember">
+                        <label for="join-remember">Keep Me Signed In</label>
+                    </div>
+                    <a href="#" class="help-icon"><i class="far fa-question-circle"></i></a>
+                </div>
+                
+                <button type="submit" class="primary-button">Continue</button>
+                <button type="button" id="go-to-signin" class="secondary-button">Sign In</button>
+            </form>
         </div>
     </div>
 
@@ -116,6 +262,172 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             displayProductsByCategory('New', 'new-products-grid');
+            
+            // Search functionality
+            const searchIcon = document.querySelector('a[href="#search"]');
+            const searchSlider = document.querySelector('.search-slider');
+            const searchOverlay = document.querySelector('.search-overlay');
+            const closeSearch = document.querySelector('.close-search');
+            
+            searchIcon.addEventListener('click', (e) => {
+                e.preventDefault();
+                searchSlider.classList.add('active');
+                searchOverlay.classList.add('active');
+                document.body.classList.add('no-scroll');
+            });
+            
+            closeSearch.addEventListener('click', () => {
+                searchSlider.classList.remove('active');
+                searchOverlay.classList.remove('active');
+                document.body.classList.remove('no-scroll');
+            });
+            
+            searchOverlay.addEventListener('click', () => {
+                searchSlider.classList.remove('active');
+                searchOverlay.classList.remove('active');
+                document.body.classList.remove('no-scroll');
+            });
+            
+            // Account sidebar functionality
+            const accountIcon = document.getElementById('account-icon');
+            const accountSidebar = document.querySelector('.account-sidebar');
+            const accountOverlay = document.querySelector('.account-overlay');
+            const closeAccount = document.querySelector('.close-account');
+            
+            accountIcon.addEventListener('click', (e) => {
+                e.preventDefault();
+                accountSidebar.classList.add('active');
+                accountOverlay.classList.add('active');
+                document.body.classList.add('no-scroll');
+            });
+            
+            closeAccount.addEventListener('click', () => {
+                accountSidebar.classList.remove('active');
+                accountOverlay.classList.remove('active');
+                document.body.classList.remove('no-scroll');
+            });
+            
+            accountOverlay.addEventListener('click', () => {
+                accountSidebar.classList.remove('active');
+                accountOverlay.classList.remove('active');
+                document.body.classList.remove('no-scroll');
+            });
+            
+            // Form modals functionality
+            const signinBtn = document.getElementById('signin-btn');
+            const joinBtn = document.getElementById('join-btn');
+            const signinModal = document.getElementById('signin-modal');
+            const joinModal = document.getElementById('join-modal');
+            const signinOverlay = document.getElementById('signin-modal-overlay');
+            const joinOverlay = document.getElementById('join-modal-overlay');
+            const closeModalBtns = document.querySelectorAll('.close-modal');
+            const goToJoinBtn = document.getElementById('go-to-join');
+            const goToSigninBtn = document.getElementById('go-to-signin');
+            
+            // Open sign in modal
+            signinBtn.addEventListener('click', () => {
+                // Close account sidebar
+                accountSidebar.classList.remove('active');
+                accountOverlay.classList.remove('active');
+                
+                // Open sign in modal
+                signinModal.classList.add('active');
+                signinOverlay.classList.add('active');
+                document.body.classList.add('no-scroll');
+            });
+            
+            // Open join modal
+            joinBtn.addEventListener('click', () => {
+                // Close account sidebar
+                accountSidebar.classList.remove('active');
+                accountOverlay.classList.remove('active');
+                
+                // Open join modal
+                joinModal.classList.add('active');
+                joinOverlay.classList.add('active');
+                document.body.classList.add('no-scroll');
+            });
+            
+            // Switch from sign in to join form
+            goToJoinBtn.addEventListener('click', () => {
+                // Close sign in modal
+                signinModal.classList.remove('active');
+                signinOverlay.classList.remove('active');
+                
+                // Open join modal
+                joinModal.classList.add('active');
+                joinOverlay.classList.add('active');
+            });
+            
+            // Switch from join to sign in form
+            goToSigninBtn.addEventListener('click', () => {
+                // Close join modal
+                joinModal.classList.remove('active');
+                joinOverlay.classList.remove('active');
+                
+                // Open sign in modal
+                signinModal.classList.add('active');
+                signinOverlay.classList.add('active');
+            });
+            
+            // Close modals
+            closeModalBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const modal = e.target.closest('.form-modal');
+                    const overlay = modal.id === 'signin-modal' ? signinOverlay : joinOverlay;
+                    
+                    modal.classList.remove('active');
+                    overlay.classList.remove('active');
+                    document.body.classList.remove('no-scroll');
+                });
+            });
+            
+            // Close modals when clicking overlay
+            signinOverlay.addEventListener('click', () => {
+                signinModal.classList.remove('active');
+                signinOverlay.classList.remove('active');
+                document.body.classList.remove('no-scroll');
+            });
+            
+            joinOverlay.addEventListener('click', () => {
+                joinModal.classList.remove('active');
+                joinOverlay.classList.remove('active');
+                document.body.classList.remove('no-scroll');
+            });
+            
+            // Toggle password visibility
+            const togglePasswordBtns = document.querySelectorAll('.toggle-password');
+            
+            togglePasswordBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const passwordField = btn.previousElementSibling;
+                    const icon = btn.querySelector('i');
+                    
+                    // Toggle type between password and text
+                    if (passwordField.type === 'password') {
+                        passwordField.type = 'text';
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    } else {
+                        passwordField.type = 'password';
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    }
+                });
+            });
+            
+            // Form submission
+            document.getElementById('signin-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                // Add sign in logic here
+                console.log('Sign in submitted');
+            });
+            
+            document.getElementById('join-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                // Add join logic here
+                console.log('Join submitted');
+            });
         });
     </script>
 </body>
